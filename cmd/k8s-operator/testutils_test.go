@@ -176,8 +176,8 @@ func expectedSTS(t *testing.T, cl client.Client, opts configOpts) *appsv1.Statef
 				Value: "true",
 			},
 		)
-		tsContainer.Ports = append(tsContainer.Ports, corev1.ContainerPort{
-			Name: "debug", ContainerPort: 9001, Protocol: "TCP"},
+		tsContainer.Ports = append(tsContainer.Ports,
+			corev1.ContainerPort{Name: "debug", ContainerPort: 9001, Protocol: "TCP"},
 			corev1.ContainerPort{Name: "metrics", ContainerPort: 9002, Protocol: "TCP"},
 		)
 	}
