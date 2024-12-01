@@ -511,6 +511,18 @@ func runReconcilers(opts reconcilerOpts) {
 		startlog.Fatalf("could not create ProxyGroup reconciler: %v", err)
 	}
 
+	// NodeConnector reconciler
+	err = builder.ControllerManagedBy(mgr).
+		For(&corev1.Node{}).
+		Owns(&tsapi.Connector{}).
+		Complete(&NodeConnectorReconciler{
+			Client: mgr.GetClient(),
+			l:      opts.log.Named("node-connector-reconciler"),
+		})
+	if err != nil {
+		startlog.Fatalf("could not create Node Connector reconciler: %v", err)
+	}
+
 	startlog.Infof("Startup complete, operator running, version: %s", version.Long())
 	if err := mgr.Start(signals.SetupSignalHandler()); err != nil {
 		startlog.Fatalf("could not start manager: %v", err)
